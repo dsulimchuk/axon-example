@@ -13,29 +13,17 @@ import org.axonframework.commandhandling.model.AggregateIdentifier;
 import org.axonframework.eventsourcing.EventSourcingHandler;
 import org.axonframework.spring.stereotype.Aggregate;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import static org.axonframework.commandhandling.model.AggregateLifecycle.apply;
 
-//@Entity
 @Aggregate
 @Data
 @Slf4j
-class SubscriberService {
-    @Id
+public class SubscriberService {
     @AggregateIdentifier
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(updatable = false)
     private Long subscriberId;
-
-    @Column(updatable = false)
     private Long serviceId;
-
     private ServiceStatus status;
 
     //JPA
@@ -52,13 +40,13 @@ class SubscriberService {
     @CommandHandler
     public void on(ActivateSubscriberServiceCommand command) {
         log.debug("on {}", command);
-        apply(new SubscriberServiceActivatedEvent());
+        apply(new SubscriberServiceActivatedEvent(command.getId()));
     }
 
     @CommandHandler
     public void on(DeactivateSubscriberServiceCommand command) {
         log.debug("on {}", command);
-        apply(new SubscriberServiceDeactivatedEvent());
+        apply(new SubscriberServiceDeactivatedEvent(command.getId()));
     }
     //endregion
 

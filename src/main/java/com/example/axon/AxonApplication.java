@@ -28,6 +28,10 @@ public class AxonApplication {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(AxonApplication.class, args);
+        init(context);
+    }
+
+    private static void init(ConfigurableApplicationContext context) {
         CommandGateway gateway = context.getBean(CommandGateway.class);
 
         gateway.send(new CreateNewSubscriberServiceCommand(555L, 123L, 555L));
@@ -36,7 +40,7 @@ public class AxonApplication {
             gateway.send(new DeactivateSubscriberServiceCommand(555L));
         }
 
-        System.out.println("vse");
+        log.info("initialization finished");
     }
 
 
